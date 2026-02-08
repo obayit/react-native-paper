@@ -21,6 +21,10 @@ export type Props = React.ComponentPropsWithRef<typeof Image> & {
    * @optional
    */
   theme?: ThemeProp;
+  /**
+   * Optional custom image component to replace default Image
+   */
+  imageComponent?: React.ComponentType<any>;
 };
 
 /**
@@ -47,6 +51,7 @@ const CardCover = ({
   total,
   style,
   theme: themeOverrides,
+  imageComponent: ImageComponent,
   ...rest
 }: Props) => {
   const theme = useInternalTheme(themeOverrides);
@@ -66,11 +71,18 @@ const CardCover = ({
 
   return (
     <View style={[styles.container, coverStyle, style]}>
-      <Image
-        {...rest}
-        style={[styles.image, coverStyle]}
-        accessibilityIgnoresInvertColors
-      />
+      {ImageComponent ? (
+        <ImageComponent
+          {...rest}
+          style={[styles.image, coverStyle]}
+        />
+      ) : (
+        <Image
+          {...rest}
+          style={[styles.image, coverStyle]}
+          accessibilityIgnoresInvertColors
+        />
+      )}
     </View>
   );
 };
